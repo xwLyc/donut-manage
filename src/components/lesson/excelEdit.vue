@@ -107,10 +107,10 @@ export default {
                     { required: true, message: '课节名称不能为空', trigger: 'blur' }
                 ],
                 question: [
-                    { required: true, message: '互动问题不能为空', trigger: 'blur' }
+                    { required: false, message: '互动问题不能为空', trigger: 'blur' }
                 ],
                 answer: [
-                    { required: true, message: '互动答案不能为空', trigger: 'blur' }
+                    { required: false, message: '互动答案不能为空', trigger: 'blur' }
                 ],
                 imageName: [
                     { required: true, message: '请选择您的课程配图', trigger: 'change' }

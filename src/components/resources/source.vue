@@ -10,6 +10,8 @@
                     :show-upload-list="uploadList"
                     :before-upload="handleBefore"
                     :on-success="handleSuccess"
+                    :format="['jpg','jpeg','png','gif','mp3','mp4','npeg','flv','mov','avi']"
+                    :on-format-error="handleFormatError"
                     style="display:inline-block" >
                     <Button type="primary" icon="ios-cloud-upload-outline">上传文件</Button>
                 </Upload>
@@ -103,6 +105,12 @@ export default {
         },
         videoClose(){
             this.$refs.videoPriew.pause();
+        },
+        handleFormatError (file) {
+            this.$Notice.warning({
+                title: '图片或视频格式错误！',
+                desc: "图片请选择 'jpg','jpeg','png','gif'格式，视频选请择'mp3','mp4','npeg','flv','mov','avi'格式"
+            });
         },
     },
     components:{

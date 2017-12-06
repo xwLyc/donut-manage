@@ -52,14 +52,32 @@ export default {
                     },
                     {
                         title: '课节名称',
-                        key: 'name'
+                        key: 'name',
+                        render: (h, params)=> {
+                            if(params.row.name){
+                                return h('div',params.row.name)
+                            }else{
+                                return h('div',{
+                                    style: {
+                                        color: 'red'
+                                    }
+                                }, '未匹配')
+                            }
+                        }
                     },
                     {
                         title: '课节配图',
                         key: 'image',
                         render: (h, params)=> {
+                            // console.log(params)
                             if(params.row.image){
                                 return h('div',params.row.image.name)
+                            }else{
+                                return h('div',{
+                                    style: {
+                                        color: 'red'
+                                    }
+                                }, '未匹配')
                             }
                         }
                     },
@@ -69,16 +87,44 @@ export default {
                         render: (h, params) =>{
                             if(params.row.video){
                                 return h('div',params.row.video.name)
+                            }else{
+                                return h('div',{
+                                    style: {
+                                        color: 'red'
+                                    }
+                                }, '未匹配')
                             }
                         }
                     },
                     {
                         title: '互动问题',
-                        key: 'question'
+                        key: 'question',
+                        render: (h, params)=> {
+                            if(params.row.question){
+                                return h('div',params.row.question)
+                            }else{
+                                return h('div',{
+                                    style: {
+                                        color: 'red'
+                                    }
+                                }, '未匹配')
+                            }
+                        }
                     },
                     {
                         title: '互动答案',
-                        key: 'answer'
+                        key: 'answer',
+                        render: (h, params)=> {
+                            if(params.row.answer){
+                                return h('div',params.row.answer)
+                            }else{
+                                return h('div',{
+                                    style: {
+                                        color: 'red'
+                                    }
+                                }, '未匹配')
+                            }
+                        }
                     },
                     {
                         title: '操作',

@@ -65,19 +65,13 @@
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        // this.$http.post(API + "/login", {
-                        //     username: this.formInline.user,
-                        //     password: this.formInline.password
-                        // }).then((res) => {
-                        //     if(res.data.code == 0){
-                        //         this.USER_SIGNIN(this.formInline.user);
-                        //         this.$router.replace({path:'/bookClassify'})
-                        //     }else{
-                        //         this.$Message.error('用户名或密码错误!');
-                        //     }
-                        // })
-                        this.USER_SIGNIN(this.formInline.user);
-                        this.$router.replace({path:'/lesson'})
+                        let userInfo = {
+                            username: this.formInline.user,
+                            password: this.formInline.password
+                        }
+                        this.USER_SIGNIN(userInfo);
+                        
+                        
                     } else {
                         this.$Message.error('表单验证失败!');
                     }
@@ -89,7 +83,15 @@
                 this.$router.replace({path:'/lesson'})
             }
         },
-        computed:mapState({ user: state => state.user})
+        computed:{
+            ...mapState(['user','loginFail','loginTips'])
+        },
+        watch: {
+            loginFail(){
+                    // 登录失败时，错误提示
+                    this.$Message.error(this.loginTips);
+            }
+        }
 
     }
 </script>

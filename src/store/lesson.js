@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:02:17 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2017-11-30 18:21:12
+ * @Last Modified time: 2017-12-04 16:58:28
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -57,6 +57,7 @@ const state = {
     editExcel:'',                                  //编辑课程表格
     selectType:'',                                 //选择类型 image or video
     importExcel:false,                             //是否可以导入表格
+    updatedStatus: false,                           //上线 下线更新状态
     
 
     
@@ -81,7 +82,8 @@ const mutations = {
     selectType: (state, selectType) => state.selectType = selectType,
     modifyEditExcel: (state, payload) => {
         // if()
-    }
+    },
+    updatedStatus: (state, updatedStatus) => state.updatedStatus = updatedStatus,
 
     
 
@@ -149,6 +151,8 @@ const actions = {
         }
         if(payload.pageCount){
             datas.pageCount = payload.pageCount;
+        }else{
+            datas.pageCount = 10;
         }
         Lesson.queryLesson(datas).then(res => {
             // console.log(res)
@@ -165,20 +169,16 @@ const actions = {
     publishLesson(context, course_id) {                             //课程上线
         Lesson.publishLesson({course_id:course_id}).then(res => {
             // console.log(res)
-            return res;
-        }).then(res=>{
             if(res.data.code == 0){
-                context.dispatch('queryLesson',{})
+                context.commit('updatedStatus', true);
             }
         })
     },
     unpublishLesson(context, course_id) {                             //课程下线
         Lesson.unpublishLesson({course_id:course_id}).then(res => {
             // console.log(res)
-            return res;
-        }).then(res=>{
             if(res.data.code == 0){
-                context.dispatch('queryLesson',{})
+                context.commit('updatedStatus', true);
             }
         })
     },

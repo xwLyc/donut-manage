@@ -19,20 +19,20 @@
                         </Select>
                     </FormItem>
                     <FormItem label="课程名称" prop="name">
-                        <Input v-model="lessonInfo.name" placeholder="请输入课程名称"></Input>
+                        <Input v-model="lessonInfo.name" placeholder="请输入课程名称，不超过20字"></Input>
                     </FormItem>
                     <FormItem label="课程介绍" prop="desc">
                         <Input v-model="lessonInfo.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
                     </FormItem>
                     <FormItem label="课程配图" prop="picName">
-                        <p>图片尺寸限制：1222*1088</p>
+                        <p>图片尺寸限制：682*384</p>
                         <Button type="primary" @click="sourceClick('picName')">资源库</Button>
                         <Input v-model="lessonInfo.picName" placeholder="请选择课程配图" style="width: 240px;margin:0px 5px;" disabled></Input>
                         <Button type="primary" @click="picPriew = true">预览</Button>
                     </FormItem>
                     <template v-if="lessonInfo.type == '1'">
                         <FormItem label="兑换封面" prop="bookName">
-                            <p>图片尺寸限制：1222*1088</p>
+                            <p>图片尺寸限制：682*384</p>
                             <Button type="primary" @click="sourceClick('bookName')">资源库</Button>
                             <Input v-model="lessonInfo.bookName" placeholder="请选择兑换封面配图" style="width: 240px;margin:0px 5px;" disabled></Input>
                             <Button type="primary" @click="bookPriew = true">预览</Button>
@@ -107,7 +107,8 @@
                     //     { required: this.lessonEdit?false:true, message: '课节类型不能为空', trigger: 'change' }
                     // ],
                     name: [
-                        { required: true, message: '课节名称不能为空', trigger: 'blur' }
+                        { required: true, message: '课程名称不能为空', trigger: 'blur' },
+                        { type: 'string', max: 20, message: '课程名称不能超过20个字', trigger: 'blur' }
                     ],
                     desc: [
                         { required: false, message: '请输入课程介绍', trigger: 'blur' }
@@ -127,7 +128,7 @@
         mounted(){
             // this.$store.dispatch('moduleLesson/queryLessonDetail',this.lessonCurId);
             let timer = setInterval(()=>{
-                if(this.lessonCourse.name && this.lessonCourse.info && this.lessonCourse.image ){
+                if(this.lessonCourse.name  && this.lessonCourse.image ){
                     this.lessonInfo = {
                         type: this.lessonCourse.type,
                         name: this.lessonCourse.name,

@@ -127,7 +127,7 @@ export default {
                                 style:{
                                     color: params.row.finished?'':'red'
                                 }
-                            },params.row.finished?'已完成':'未完成')
+                            },params.row.finished?'是':'否')
                         }
                     },
                     {
@@ -301,11 +301,17 @@ export default {
         }
     },
     computed:{
-        ...mapState(['lessonList','lessonLoad','totalCount','pageCount','lessonCurId'])
+        ...mapState(['lessonList','lessonLoad','totalCount','pageCount','lessonCurId','updatedStatus'])
     },
     watch: {
         select1() {
             console.log(this.select1)
+        },
+        updatedStatus(val, oldVal){
+            if(val){
+                this.queryLesson();
+                this.$store.commit('moduleLesson/updatedStatus',false);
+            }
         }
     }
 
