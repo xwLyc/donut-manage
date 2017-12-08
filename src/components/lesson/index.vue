@@ -48,6 +48,9 @@
         <Modal v-model="modal1" title="确定删除么？" @on-ok="ok" @on-cancel="cancel">
             <p>删除数据将不可恢复！</p>
         </Modal>
+        <Modal v-model="modal2" title="生成客户端地址">
+            <p>{{webSite}}</p>
+        </Modal>
     </div>
 </template>
 <script>
@@ -60,6 +63,7 @@ export default {
             select1: 'name',
             upTimeDate: '',
             modal1:false,
+            modal2:false,
             page: 0,
             paramsIndex: 0,
             options1: {
@@ -144,7 +148,7 @@ export default {
                     {
                         title: '操作',
                         key: 'action',
-                        width: 300,
+                        width: 200,
                         // fixed: 'right',
                         align: 'center',
                         render: (h, params) => {
@@ -156,7 +160,7 @@ export default {
                                             size: 'small'
                                         },
                                         style: {
-                                            marginRight: '5px'
+                                            // marginRight: '5px'
                                         },
                                         on: {
                                             click: () => {
@@ -170,7 +174,7 @@ export default {
                                             size: 'small'
                                         },
                                         style: {
-                                            marginRight: '5px'
+                                            // marginRight: '5px'
                                         },
                                         on: {
                                             click: () => {
@@ -185,7 +189,7 @@ export default {
                                             size: 'small'
                                         },
                                         style: {
-                                            marginRight: '5px',
+                                            // marginRight: '5px',
                                             // display:params.row.status=='-1'? 'none':''
                                         },
                                         on: {
@@ -208,7 +212,22 @@ export default {
                                                 this.modal1 = true;
                                             }
                                         }
-                                    }, '删除')
+                                    }, '删除'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'info',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.createWebsite(params.row._id);
+                                                this.modal2 = true;
+                                            }
+                                        }
+                                    }, '生成地址')
                                 ]);
                             // }
                             
@@ -287,6 +306,9 @@ export default {
             datas.page = this.page;
             this.$store.dispatch('moduleLesson/queryLesson',datas);
         },
+        createWebsite(course_id){
+            this.$store.dispatch('moduleLesson/createWebsite',course_id);
+        },
         lessonPage(page){
             this.page = page-1;
             this.queryLesson();
@@ -301,7 +323,7 @@ export default {
         }
     },
     computed:{
-        ...mapState(['lessonList','lessonLoad','totalCount','pageCount','lessonCurId','updatedStatus'])
+        ...mapState(['lessonList','lessonLoad','totalCount','pageCount','lessonCurId','updatedStatus','webSite'])
     },
     watch: {
         select1() {
@@ -340,6 +362,10 @@ export default {
         }
     }
 
-
+    .ivu-table-cell{
+        button{
+            margin: 3px 2px;
+        }
+    }
 </style>
 

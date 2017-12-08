@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-30 17:23:30 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2017-11-30 18:20:25
+ * @Last Modified time: 2017-12-06 11:24:51
  */
 import utils from '../utils'
 
@@ -51,6 +51,14 @@ export default {
     updatedLessonDetail: (obj)=>{
         return new Promise((resolve, reject) => {
             utils.httpPost(utils.API+'/spell/update_lesson', obj)
+            .then(res=> resolve(res))
+            .catch(err=> reject(err))
+        })
+    },
+    // 生成客户端地址
+    createWebsite: (obj)=>{
+        return new Promise((resolve, reject) => {
+            utils.httpPost(utils.API+'/spell/wx/index/get_home_page', obj)
             .then(res=> resolve(res))
             .catch(err=> reject(err))
         })

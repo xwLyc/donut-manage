@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:02:17 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2017-12-04 16:58:28
+ * @Last Modified time: 2017-12-06 11:39:35
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -58,6 +58,7 @@ const state = {
     selectType:'',                                 //选择类型 image or video
     importExcel:false,                             //是否可以导入表格
     updatedStatus: false,                           //上线 下线更新状态
+    webSite: '',                                   //客户端地址
     
 
     
@@ -84,6 +85,7 @@ const mutations = {
         // if()
     },
     updatedStatus: (state, updatedStatus) => state.updatedStatus = updatedStatus,
+    webSite: (state, webSite) => state.webSite = webSite,
 
     
 
@@ -218,6 +220,11 @@ const actions = {
             }
         })
 
+    },
+    createWebsite(context, course_id){                                           //生成客户端地址
+        Lesson.createWebsite({course_id: course_id}).then(res => {
+            context.commit('webSite', res.data.url)
+        })
     }
 
 }
