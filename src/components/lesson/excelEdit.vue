@@ -152,7 +152,7 @@ export default {
             if(this.editExcel._id){
                 this.excelInfo.lesson_id = this.editExcel._id;
             }
-            if(this.editExcel.order && this.editExcel.name && this.editExcel.image && this.editExcel.video && this.editExcel.question && this.editExcel.answer && this.editExcel._id){
+            if(this.editExcel.order && this.editExcel._id){
                 clearInterval(timerEditExcel);
             }
             
@@ -230,6 +230,8 @@ export default {
                             this.excelInfo.imageName = e.name;
                             this.excelInfo.imageUrl = e.url;
                             this.excelInfo.imageId = e._id;
+                            console.log(this.excelInfo.imageName)
+                            console.log(this.excelInfo)
                             return false;
                         }
                     })

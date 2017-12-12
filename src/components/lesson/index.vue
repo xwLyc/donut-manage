@@ -66,6 +66,7 @@ export default {
             modal2:false,
             page: 0,
             paramsIndex: 0,
+            course_id:'',
             options1: {
                 shortcuts: [
                     {
@@ -209,6 +210,7 @@ export default {
                                         on: {
                                             click: () => {
                                                 this.paramsIndex = params.index;
+                                                this.course_id = params.row._id;
                                                 this.modal1 = true;
                                             }
                                         }
@@ -314,8 +316,16 @@ export default {
             this.queryLesson();
         },
         ok(){
-            this.modal1 = false;
-            this.remove(this.paramsIndex)
+            this.$store.dispatch('moduleLesson/deleteLesson',this.course_id).then(res =>{
+                if(res.data.code == 0){
+                    this.modal1 = false;
+                    this.$Message.success('删除成功！');
+                    this.remove(this.paramsIndex);
+                    this.course_id = '';
+                }else{
+                    this.$Message.error(res.data.msg);                    
+                }
+            });
             
         },
         cancel(){

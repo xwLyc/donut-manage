@@ -2,13 +2,14 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:02:17 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2017-12-06 11:39:35
+ * @Last Modified time: 2017-12-12 20:38:56
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import route from '../router'
 import utils from '../utils'
 import Lesson from '../Api/lesson'
+
 Vue.use(Vuex)
 
 
@@ -183,6 +184,14 @@ const actions = {
                 context.commit('updatedStatus', true);
             }
         })
+    },
+    deleteLesson(context, course_id) {                             //删除未上线课程
+        return new Promise((resolve, reject) => {
+            Lesson.deleteLesson({course_id:course_id})
+            .then(res => resolve(res))
+            .catch(err => reject(err))
+        })
+        
     },
 
     queryLessonDetail(context, lessonCurId) {                       //查询课程下 的课节
