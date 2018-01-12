@@ -34,11 +34,11 @@
 
             <!-- 查看图片  -->
             <Modal title="查看图片" v-model="visibleImg.status" :styles="{'text-align':'center'}" :transfer="false" :mask-closable="false" width="600">
-                <img :src="visibleImg.url?URL_WEBSITE+visibleImg.url:''" style="max-width: 100%;max-height:540px;">
+                <img :src="visibleImg.url?visibleImg.url:''" style="max-width: 100%;max-height:540px;">
             </Modal>
             <!-- 查看视频  -->
             <Modal title="查看视频" v-model="visibleVideo.status" style="text-align:center;" width="600" :transfer="false" :mask-closable="false" @on-ok="videoClose" @on-cancel="videoClose">
-                <video ref="videoPriew" controls="controls"  preload="true" :src="visibleVideo.url?URL_WEBSITE+visibleVideo.url:''" style="max-width: 100%;max-height:540px;"></video>
+                <video ref="videoPriew" controls="controls"  preload="true" :src="visibleVideo.url?visibleVideo.url:''" style="max-width: 100%;max-height:540px;"></video>
             </Modal>
         </div>
        

@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:02:41 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2017-12-04 17:38:14
+ * @Last Modified time: 2018-01-09 18:29:18
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -46,7 +46,13 @@ const actions = {
         })
     },
     [USER_SIGNOUT]({commit}){
-        commit(USER_SIGNOUT)
+        Login.exist().then(res => {
+            if(res.data.code == 0){
+                commit(USER_SIGNOUT)
+                Route.push({path:'/login'});
+            }
+        })
+        
     }
 
 }

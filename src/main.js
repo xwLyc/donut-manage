@@ -14,7 +14,7 @@ Vue.use(iView)
 Vue.prototype.API = process.env.API_URL;
 Vue.prototype.URL_WEBSITE = process.env.URL_WEBSITE;  //资源站点Url
 
-console.log(process.env.API_URL)
+// console.log(process.env.API_URL)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

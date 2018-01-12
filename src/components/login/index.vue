@@ -80,7 +80,7 @@
         },
         mounted(){
             if(this.user){
-                this.$router.replace({path:'/lesson'})
+                // this.$router.replace({path:'/lesson'})
             }
         },
         computed:{

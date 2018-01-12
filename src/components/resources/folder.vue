@@ -7,7 +7,7 @@
                 <div class="folderImg" v-else-if="info.type=='image'">
                     <Icon v-show="imgLoading" type="images" size="40" color="#2dcc9f"></Icon>
                     <div class="imgPriew" v-show="!imgLoading">
-                        <img :src="info.url?URL_WEBSITE+info.url:''" alt="">
+                        <img :src="info.url?info.url:''" alt="">
                     </div>
                 </div>
                 <div class="folderImg" v-else-if="info.type=='video'">
@@ -17,7 +17,7 @@
                 <div class="folderImg" v-else-if="info.type=='audio'">
                     <img src="https://donutlive.leanapp.cn/images/paper/play.png" class="playIcon" alt="">
                     <Icon type="music-note" size="40" color="#418ffc"></Icon>
-                    <audio ref="audioPlay" :src="info.url?URL_WEBSITE+info.url:''"></audio>
+                    <audio ref="audioPlay" :src="info.url?info.url:''"></audio>
                 </div>
                 <Icon class="" v-else type="document-text" size="40" color="#2dcc9f"></Icon>
             </div>
@@ -37,11 +37,11 @@
         <div class="mark" v-show="creating"></div>
         <!-- 查看图片  -->
         <!-- <Modal title="查看图片" v-model="visibleImg" :styles="{'text-align':'center'}" width="600">
-            <img :src="info.url?URL_WEBSITE+info.url:''" style="max-width: 100%;max-height:540px;">
+            <img :src="info.url?info.url:''" style="max-width: 100%;max-height:540px;">
         </Modal> -->
         <!-- 查看视频  -->
         <!-- <Modal title="查看视频" v-model="visibleVideo" style="text-align:center;" width="600" @on-ok="videoClose" @on-cancel="videoClose">
-            <video ref="videoPriew" controls="controls" autoplay="autoplay" preload="none" :src="info.url?URL_WEBSITE+info.url:''" style="max-width: 100%;max-height:540px;"></video>
+            <video ref="videoPriew" controls="controls" autoplay="autoplay" preload="none" :src="info.url?info.url:''" style="max-width: 100%;max-height:540px;"></video>
         </Modal> -->
     </div>
     
@@ -83,7 +83,7 @@ export default {
         })
         
         if(this.info.type=='image'){
-            this.preloadImg((this.URL_WEBSITE+this.info.url),()=>{
+            this.preloadImg((this.info.url),()=>{
                 this.imgLoading = false;
             })
         }

@@ -1,8 +1,8 @@
 <template>
-    <div class="">
+    <div class="activityBox">
         <div class="layout-breadcrumb">
             <Breadcrumb>
-                <BreadcrumbItem href="/lesson">课程管理</BreadcrumbItem>
+                <BreadcrumbItem href="">活动管理</BreadcrumbItem>
                 <!-- <BreadcrumbItem href="#">应用中心</BreadcrumbItem>
                                         <BreadcrumbItem>某应用</BreadcrumbItem> -->
             </Breadcrumb>
@@ -12,9 +12,9 @@
                 <div class="queryTop">
                     <div class="fbox">
                         <Input v-model="value1" style="width: 250px">
-                        <Select v-model="select1" slot="prepend" style="width: 80px">
-                            <Option value="name">课程名称</Option>
-                            <Option value="type">课程类型</Option>
+                        <Select v-model="select" slot="prepend" style="width: 80px">
+                            <Option value="name">活动名称</Option>
+                            <Option value="type">活动类型</Option>
                             <!-- <Option value="status">状态</Option> -->
                         </Select>
                         </Input>
@@ -24,20 +24,20 @@
                         <DatePicker type="daterange" v-model="upTimeDate" :options="options1" placement="bottom-end" placeholder="选择日期" style="width: 200px"></DatePicker>
                     </div>
                     <div class="fbox">
-                        <Button type="primary" @click="queryLesson(page = 0)">查询</Button>
+                        <Button type="primary" @click="queryActivity(page = 0)">查询</Button>
                     </div>
                 </div>
                 
                 <div class="createBox">
-                    <!-- <router-link :to="{path:'/lesson/editLesson'}"> -->
-                        <Button type="primary" @click="newCreateLesson">新建课程</Button>
+                    <!-- <router-link :to="{path:'/activity/editActivity'}"> -->
+                        <Button type="primary" @click="newCreateActivity">新建活动</Button>
                     <!-- </router-link> -->
                     
                 </div>
                 <div class="List">
-                    <Table border :columns="columns" :data="lessonList"></Table>
-                    <Page class-name="pageBox" :total="totalCount" :current="page+1" :page-size="pageCount" show-elevator  @on-change="lessonPage"></Page>
-                    <Spin fix size="large" v-show="lessonLoad"></Spin>
+                    <Table border :columns="columns" :data="activityList"></Table>
+                    <Page class-name="pageBox" :total="totalCount" :current="page+1" :page-size="pageCount" show-elevator  @on-change="activityPage"></Page>
+                    <Spin fix size="large" v-show="activityLoad"></Spin>
                 </div>
                 
 
@@ -48,25 +48,26 @@
         <Modal v-model="modal1" title="确定删除么？" @on-ok="ok" @on-cancel="cancel">
             <p>删除数据将不可恢复！</p>
         </Modal>
-        <Modal v-model="modal2" title="生成客户端地址">
-            <p>{{webSite}}</p>
+        <Modal v-model="modal2" title="海报预览" style="text-align:center;z-index:99999;" width="600">
+            <img :src="posterUrl?URL_WEBSITE+posterUrl:''" style="max-width: 100%;max-height:540px;">
         </Modal>
+
     </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('moduleLesson')
+import { mapState, mapActions  } from 'vuex'
 export default {
     data() {
         return {
             value1: '',
-            select1: 'name',
+            select: 'name',
             upTimeDate: '',
             modal1:false,
             modal2:false,
             page: 0,
             paramsIndex: 0,
-            course_id:'',
+            activity_id:'',
+            posterUrl: '',
             options1: {
                 shortcuts: [
                     {
@@ -99,41 +100,58 @@ export default {
                 ]
             },
             columns: [
+                    // {
+                    //     title: 'ID',
+                    //     key: 'id',
+                    //     width: 50,
+                    // },
                
                     {
-                        title: '课程名称',
-                        key: 'name',
+                        title: '活动名称',
+                        key: 'actionName'
                     },
                     {
-                        title: '课程类型',
+                        title: '活动类型',
                         key: 'type',
-                        render: (h, params) =>{
-                            return h('p',params.row.type==0?'续期类':'兑换类')
+                        render: (h, params) => {
+                            return h('div', params.row.type == 1 ? '裂变类':'课程类')
                         }
                     },
                     {
-                        title: '课节数量',
-                        key: 'lessonCount',
-                        // width: 100
+                        title: '活动码段',
+                        key: 'part',
+                        render: (h, params) => {
+                            return h('div', '['+ params.row.minKey+ ', '+ params.row.maxKey+']')
+                        }
+                    },
+                    {
+                        title: '关联课程',
+                        key: 'relation',
+                        render: (h, params) => {
+                            return h('div', params.row.course ? params.row.course.name:'')
+                        }
                     },
                     {
                         title: '上线时间',
                         key: 'onlineDate',
+                        render: (h, params) => {
+                            return h('div', params.row.onlineDate)
+                        }
                     },
                     {
                         title: '下线时间',
                         key: 'offlineDate',
+                        render: (h, params) => {
+                            return h('div', params.row.downlineDate)
+                        }
                     },
                     {
-                        title: '是否完成',
-                        key: 'finished',
+                        title: '新增关注',
+                        key: 'fans',
                         render: (h, params) => {
-                            return h('div',{
-                                style:{
-                                    color: params.row.finished?'':'red'
-                                }
-                            },params.row.finished?'是':'否')
+                            return h('div', params.row.newCount)
                         }
+
                     },
                     {
                         title: '状态',
@@ -141,19 +159,18 @@ export default {
                         render: (h, params) => {
                             return h('div',{
                                 style:{
-                                    color: params.row.status==1?'#19be6b':''
+                                    color: params.row.state==1 ? '#19be6b':''
                                 }
-                            },params.row.status == 0 ? '未上线':(params.row.status == 1) ? '已上线':'已下线')
+                            },params.row.state === 0 ? '': params.row.state ==1 ?'已上线':'已下线')
                         }
                     },
                     {
                         title: '操作',
                         key: 'action',
-                        width: 200,
+                        width: 250,
                         // fixed: 'right',
                         align: 'center',
                         render: (h, params) => {
-                            // if(params.row.status == 1 || params.row.status == 0){
                                 return h('div', [
                                     h('Button', {
                                         props: {
@@ -165,10 +182,10 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.editLesson(params.row._id);
+                                                this.editActivity(params.row._id, params.row.type);
                                             }
                                         }
-                                    }, '编辑课程'),
+                                    }, '编辑活动 '),
                                     h('Button', {
                                         props: {
                                             type: 'warning',
@@ -179,11 +196,25 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                // console.log(params.row._id)
-                                                this.excelLesson(params.row._id, params.row.status);
+                                                this.toLockConfig(params.row._id, params.row.type);
                                             }
                                         }
-                                    }, '资源匹配'),
+                                    }, '解锁配置'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'info',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            // marginRight: '5px',
+                                            // display:params.row.status=='-1'? 'none':''
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.toMsgConfig( params.row._id, params.row.type);
+                                            }
+                                        }
+                                    }, '消息配置' ),
                                     h('Button', {
                                         props: {
                                             type: 'success',
@@ -195,43 +226,42 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.updateLesson(params.row.status, params.row._id);
+                                                this.updateActivity(params.row.state, params.row._id);
                                             }
                                         }
-                                    }, params.row.status==1 ? '下线' : '上线' ),
+                                    }, params.row.state > 0 ? '下线':'上线' ),
                                     h('Button', {
                                         props: {
                                             type: 'error',
                                             size: 'small'
                                         },
                                         style: {
-                                            display:params.row.status==0? '':'none'
+                                            display:params.row.state == 0? '':'none'
                                         },
                                         on: {
                                             click: () => {
-                                                this.paramsIndex = params.index;
-                                                this.course_id = params.row._id;
+                                                // this.paramsIndex = params.index;
+                                                this.activity_id = params.row._id;
                                                 this.modal1 = true;
                                             }
                                         }
                                     }, '删除'),
                                     h('Button', {
                                         props: {
-                                            type: 'info',
+                                            // type: 'error',
                                             size: 'small'
                                         },
                                         style: {
-                                            
+                                            // backgroundColor: '#f02db1',
+
                                         },
                                         on: {
                                             click: () => {
-                                                this.createWebsite(params.row._id);
-                                                this.modal2 = true;
+                                                this.previewPosters(params.row.donut_poster);
                                             }
                                         }
-                                    }, '生成地址')
+                                    }, '预览海报')
                                 ]);
-                            // }
                             
                         }
                     }
@@ -250,78 +280,81 @@ export default {
         }
     },
     created() {
-        this.queryLesson();
-
+        this.queryActivity();
+        this.clearActivity();
     },
     methods:{
-        newCreateLesson(){
-            this.$store.dispatch('moduleLesson/initLessonInfo');
-            this.$router.push({path:'/lesson/editLesson'});
+        ...mapActions('moduleActivity',['clearActivity', 'onlineActivity', 'deleteActivity']),
+        newCreateActivity(){
+            this.$router.push({path:'/activity/editActivity'});
         },
-        editLesson (_id) {
-            this.$store.commit('moduleLesson/lessonCurId',_id);
-            this.$store.commit('moduleLesson/lessonEdit',true);
+        editActivity (_id, type) {
+            this.$store.commit('moduleActivity/activityCurId',_id);
+            this.$store.commit('moduleActivity/activityType',type);
+            this.$store.commit('moduleActivity/activityEdit',true);
             let timerEdit = setInterval(()=>{
-                if(this.lessonCurId){
-                    this.$store.dispatch('moduleLesson/queryLessonDetail',_id);
-                    this.$router.push({path: '/lesson/editLesson'});
+                if(this.activityCurId){
+                    this.$router.push({path: '/activity/editActivity'});
                     clearInterval(timerEdit);
                 }
             },10)
         },
-        excelLesson(_id, status){
-            this.$store.commit('moduleLesson/lessonCurId',_id);
-            if(status==0){
-                this.$store.commit('moduleLesson/importExcel',true);
-            }else{
-                this.$store.commit('moduleLesson/importExcel',false);
-            }
-            let timerExcel = setInterval(()=>{
-                if(this.lessonCurId){
-                    this.$store.dispatch('moduleLesson/queryLessonDetail',_id);
-                    this.$router.push({path: '/lesson/excelLesson'});
-                    clearInterval(timerExcel);
-                }
-            },10)
+        toLockConfig(_id, type){
+            this.$store.commit('moduleActivity/activityCurId',_id);
+            this.$store.commit('moduleActivity/activityType',type);
+            this.$router.push( {name: 'lockConfig'});
+        },
+        toMsgConfig(_id, type){
+            this.$store.commit('moduleActivity/activityCurId',_id);
+            this.$store.commit('moduleActivity/activityType',type);
+            this.$router.push( {name: 'msgConfig'});
         },
         remove (index) {
-            this.lessonList.splice(index, 1);
+            this.activityList.splice(index, 1);
         },
-        updateLesson(status, _id){
-            if(status==0 || status == -1){            //上线
-                this.$store.dispatch('moduleLesson/publishLesson',_id);
-            }else{                  //下线
-                this.$store.dispatch('moduleLesson/unpublishLesson',_id);
+        updateActivity(state, _id){
+            if(state < 1){            // 未上线 to 上线
+                this.onlineActivity({segment_id: _id, type: 1}).then(res => {
+                    this.$Message.success('上线成功！');
+                    this.queryActivity();
+                })
+            }else{                  //已上线 to 下线
+                this.onlineActivity({segment_id: _id, type: -1}).then(res => {
+                    this.$Message.success('下线成功！');
+                    this.queryActivity();
+                })
             }
         },
-        queryLesson(){
-            // console.log(this.select1)
+        queryActivity(){
+            // console.log(this.select)
             // console.log(this.value1)
             let datas = {};
             if((this.value1).trim()){
-                datas[this.select1] = this.value1.trim();
+                datas[this.select] = this.value1.trim();
             }
             if(this.upTimeDate[0] && this.upTimeDate[1]){
                 datas['date'] = this.upTimeDate.join(',');
             }
+            console.log(datas)
             datas.pageCount = this.pageCount;
             datas.page = this.page;
-            this.$store.dispatch('moduleLesson/queryLesson',datas);
+            this.$store.dispatch('moduleActivity/queryActivity',datas);
         },
-        createWebsite(course_id){
-            this.$store.dispatch('moduleLesson/createWebsite',course_id);
+        previewPosters(url){
+            this.posterUrl = url;
+            this.modal2 = true;
         },
-        lessonPage(page){
+        activityPage(page){
             this.page = page-1;
-            this.queryLesson();
+            this.queryActivity();
         },
         ok(){
-            this.$store.dispatch('moduleLesson/deleteLesson',this.course_id).then(res =>{
+            this.deleteActivity(this.activity_id).then(res =>{
                 if(res.data.code == 0){
                     this.modal1 = false;
                     this.$Message.success('删除成功！');
-                    this.remove(this.paramsIndex);
-                    this.course_id = '';
+                    this.activity_id = '';
+                    this.queryActivity();
                 }else{
                     this.$Message.error(res.data.msg);                    
                 }
@@ -333,16 +366,16 @@ export default {
         }
     },
     computed:{
-        ...mapState(['lessonList','lessonLoad','totalCount','pageCount','lessonCurId','updatedStatus','webSite'])
+        ...mapState('moduleActivity',['activityList','activityLoad','totalCount','pageCount','activityCurId','updatedStatus','webSite'])
     },
     watch: {
-        select1() {
-            console.log(this.select1)
+        select() {
+            console.log(this.select)
         },
         updatedStatus(val, oldVal){
             if(val){
-                this.queryLesson();
-                this.$store.commit('moduleLesson/updatedStatus',false);
+                this.queryActivity();
+                this.$store.commit('moduleActivity/updatedStatus',false);
             }
         }
     }
@@ -350,5 +383,25 @@ export default {
 }
 </script>
 <style lang="scss" scope>
+    .activityList{
+        position: relative;
+
+        .pageBox{
+            // float: right;
+            text-align: right;
+            margin: 15px;
+        }
+    }
+
+    .ivu-table-cell{
+        button{
+            margin: 3px 2px;
+        }
+    }
+
+    .layout-content{
+        padding-bottom: 60px;
+    }
+
 </style>
 

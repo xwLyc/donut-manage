@@ -1,6 +1,6 @@
 
 <template>
-    <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
+    <div class="layout" :class="{'layout-hide-text': spanLeft < 4}">
         <Row type="flex">
             <Col :span="spanLeft" class="layout-menu-left">
                 <Menu :active-name="activeName" theme="dark" width="auto">
@@ -17,9 +17,21 @@
                             <span class="layout-text">资源管理</span>
                         </MenuItem>
                     </router-link>
+                    <router-link :to="{path:'/activity'}">
+                        <MenuItem name="activity">
+                            <Icon type="ios-analytics" :size="iconSize"></Icon>
+                            <span class="layout-text">活动管理</span>
+                        </MenuItem>
+                    </router-link>
+                    <router-link :to="{path:'/template'}">
+                        <MenuItem name="template">
+                            <Icon type="ios-color-filter" :size="iconSize"></Icon>
+                            <span class="layout-text">模板管理</span>
+                        </MenuItem>
+                    </router-link>
                     <router-link :to="{path:'/statistics'}">
                         <MenuItem name="statistics">
-                            <Icon type="ios-analytics" :size="iconSize"></Icon>
+                            <Icon type="pie-graph" :size="iconSize"></Icon>
                             <span class="layout-text">数据统计</span>
                         </MenuItem>
                     </router-link>
@@ -59,25 +71,34 @@
     export default {
         data () {
             return {
-                title: '多纳自然拼读后台管理',
+                title: '微信课',
                 curTitle: '对对对',
                 activeName: 'lesson',
-                spanLeft: 5,
-                spanRight: 19
+                spanLeft: 2,
+                spanRight: 22
             }
         },
         created(){
             //绑定路由选中当前菜左侧单
-            let lessonReg = /^\/lesson(?:\/(?=$))?$/;
-            let resourcesReg = /^\/resources(?:\/(?=$))?$/;
-            let statisticsReg = /^\/statistics(?:\/(?=$))?$/;
+            let lessonReg = /^\/lesson.*$/;
+            let resourcesReg = /^\/resources.*$/;
+            let activityReg = /^\/activity.*$/;
+            let templateReg = /^\/template.*$/;
+            let statisticsReg = /^\/statistics.*$/;
             let curRouter = this.$router.history.current.fullPath;
-            // console.log(statisticsReg.test(curRouter))
+            // console.log(curRouter)
+            // console.log(templateReg.test(curRouter))
             if(lessonReg.test(curRouter)){  //lesson
                 this.activeName = 'lesson';
             }
             if(resourcesReg.test(curRouter)){  //resources
                 this.activeName = 'resources';
+            }
+            if(activityReg.test(curRouter)){  //activity
+                this.activeName = 'activity';
+            }
+            if(templateReg.test(curRouter)){  //template
+                this.activeName = 'template';
             }
             if(statisticsReg.test(curRouter)){  //statistics
                 this.activeName = 'statistics';
@@ -93,25 +114,24 @@
                 user: state => state.user
             }),
             iconSize () {
-                return this.spanLeft === 5 ? 14 : 24;
+                return this.spanLeft === 4 ? 14 : 24;
             }
         },
         methods: {
             ...mapActions([USER_SIGNOUT]),
             logout(){
                 this.USER_SIGNOUT();
-                this.$router.push({ path: '/login' })
             },
             toggleClick () {
-                if (this.spanLeft === 5) {
+                if (this.spanLeft === 4) {
                     this.spanLeft = 2;
                     this.spanRight = 22;
-                    this.title = "自然拼读"
+                    this.title = "微信课"
                 } else {
-                    this.spanLeft = 5;
-                    this.spanRight = 19;
+                    this.spanLeft = 4;
+                    this.spanRight = 20;
                     setTimeout(()=>{
-                        this.title = "多纳自然拼读后台管理"
+                        this.title = "微信课后台管理"
                     },200)
                 }
             }
@@ -131,7 +151,11 @@
     .tac{
         text-align: center;
     }
+    .pos_r{
+        position: relative;
+    }
     .layout{
+        min-width: 1000px;
         border: 1px solid #d7dde4;
         background: #f5f7f9;
         position: relative;
@@ -224,5 +248,34 @@
         overflow: hidden;
         background: #fff;
         border-radius: 4px;
+    }
+
+
+    .queryTop{
+        height: 46px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #efefef;
+        .fbox{
+            float: left;
+            margin-right: 20px;
+        }
+    }
+    .createBox{
+        margin: 10px 0px;
+    }
+    .List{
+        position: relative;
+
+        .pageBox{
+            // float: right;
+            text-align: right;
+            margin: 15px;
+        }
+    }
+
+    .ivu-table-cell{
+        button{
+            margin: 3px 2px;
+        }
     }
 </style>
