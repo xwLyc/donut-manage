@@ -51,6 +51,10 @@
         <Modal v-model="modal2" title="海报预览" style="text-align:center;z-index:99999;" width="600">
             <img :src="posterUrl?URL_WEBSITE+posterUrl:''" style="max-width: 100%;max-height:540px;">
         </Modal>
+        </Modal>
+        <Modal v-model="modal3" title="二维码预览" style="text-align:center;z-index:99999;" width="600">
+            <img :src="ewmUrl?ewmUrl:''" style="max-width: 100%;max-height:540px;">
+        </Modal>
 
     </div>
 </template>
@@ -64,10 +68,12 @@ export default {
             upTimeDate: '',
             modal1:false,
             modal2:false,
+            modal3:false,
             page: 0,
             paramsIndex: 0,
             activity_id:'',
             posterUrl: '',
+            ewmUrl: '',
             options1: {
                 shortcuts: [
                     {
@@ -260,7 +266,22 @@ export default {
                                                 this.previewPosters(params.row.donut_poster);
                                             }
                                         }
-                                    }, '预览海报')
+                                    }, '预览海报'),
+                                    h('Button', {
+                                        props: {
+                                            // type: 'error',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            // backgroundColor: '#f02db1',
+
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.previewEwm(params.row.root_url);
+                                            }
+                                        }
+                                    }, '二维码')
                                 ]);
                             
                         }
@@ -335,7 +356,7 @@ export default {
             if(this.upTimeDate[0] && this.upTimeDate[1]){
                 datas['date'] = this.upTimeDate.join(',');
             }
-            console.log(datas)
+            // console.log(datas)
             datas.pageCount = this.pageCount;
             datas.page = this.page;
             this.$store.dispatch('moduleActivity/queryActivity',datas);
@@ -343,6 +364,10 @@ export default {
         previewPosters(url){
             this.posterUrl = url;
             this.modal2 = true;
+        },
+        previewEwm(url){
+            this.ewmUrl = url;
+            this.modal3 = true;
         },
         activityPage(page){
             this.page = page-1;

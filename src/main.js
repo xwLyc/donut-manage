@@ -7,9 +7,11 @@ import utils from './utils'
 import store from './store'      // vuex
 import iView from 'iview'         //iview
 import 'iview/dist/styles/iview.css';    // 使用 CSS
-
-
 Vue.use(iView)
+
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts 
+
 
 Vue.prototype.API = process.env.API_URL;
 Vue.prototype.URL_WEBSITE = process.env.URL_WEBSITE;  //资源站点Url

@@ -161,23 +161,22 @@
         },
         mounted(){
             
+            this.queryLesson().then(res => {
+                let data = res.data.data;
+                data.forEach(e => {
+                    this.courseList.push({_id: e._id, name: e.name});
+                })
+            });
             if(!this.activityEdit){ 
                 // 新建
                 this.spin = false;
-                this.queryLesson().then(res => {
-                    console.log(res)
-                    let data = res.data.data;
-                    data.forEach(e => {
-                        this.courseList.push({_id: e._id, name: e.name});
-                    })
-                });
             }else{
                 // 正在编辑
                 this.spin = false;
                 this.ruleValidate.part = [{ required: true, message: '请输入活动码段', trigger: 'blur'}];
                 this.queryActivityDetail(this.activityCurId).then(res => {
                     if(res.data.code == 0){
-                        console.log(res.data.data)
+                        // console.log(res.data.data)
                         let data = res.data.data;
                         this.activityInfo.type = data.type.toString();
                         this.activityInfo.name = data.actionName;
@@ -230,7 +229,7 @@
                         console.log(this.activityInfo)
                         if(!this.activityEdit){                     //新建
                             this.createActivity(this.activityInfo).then(res => {
-                                console.log(res)
+                                // console.log(res)
                                 if(res.data.code == 0){
                                     this.$Message.success('创建成功!');
                                     this.$router.push({path:'/activity'});
@@ -248,7 +247,7 @@
                                 rect_xywh: this.activityInfo.site,
                             }
                             this.editActivityDetail(datas).then(res => {
-                                console.log(res)
+                                // console.log(res)
                                 if(res.data.code == 0){
                                     this.$Message.success('编辑成功!');
                                     this.$router.push({path:'/activity'});

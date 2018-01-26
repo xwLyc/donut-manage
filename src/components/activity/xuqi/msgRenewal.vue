@@ -95,20 +95,22 @@
                     this.queryRenuwalConfig(this.activityCurId).then(res => {
                         console.log(res)
                         let data = res.data.data;
-                        this.xqSuccessMsg1 = data.continueSuccess.get_course._id;
-                        this.xqSuccessMsg2 = data.continueSuccess.scan._id;
-                        let arr = [];
-                        data.continueTask.forEach((e,i) => {
-                            arr.push({
-                                timeDay: e[0]._id,
-                                timeMsg: e[1]._id
+                        if(Object.keys(data.continueSuccess).length>0 && data.continueTask.length>0){
+                            this.xqSuccessMsg1 = data.continueSuccess.scan._id;
+                            this.xqSuccessMsg2 = data.continueSuccess.get_course._id;
+                            let arr = [];
+                            data.continueTask.forEach((e,i) => {
+                                arr.push({
+                                    timeDay: e[0]._id,
+                                    timeMsg: e[1]._id
+                                })
                             })
-                        })
-                        arr.push({
-                            timeDay: '',
-                            timeMsg: '',
-                        })
-                        this.timeList = arr;
+                            arr.push({
+                                timeDay: '',
+                                timeMsg: '',
+                            })
+                            this.timeList = arr;
+                        }
                         this.spin = false;
     
                     });
@@ -176,7 +178,7 @@
                     }
                     this.lockConfig(datas).then(res => {
                         if(res.data.code == 0){
-                            this.$Message.success('到期提醒通知配置成功 ^_^');
+                            this.$Message.success('续期通知配置成功 ^_^');
                         }
                     })
                 }

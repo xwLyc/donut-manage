@@ -144,6 +144,12 @@ export default {
                 if(res.data.code == 0){
                     this.templateList.splice(index, 1);
                     this.$Message.success('删除成功！');
+                }else{
+                    this.$Message.error({
+                        content: res.data.msg + '(此模板已被使用！)',
+                        duration: 3
+                    });
+
                 }
             })
         },

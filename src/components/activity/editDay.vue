@@ -31,12 +31,15 @@ export default {
             },
             ruleValidate: {
                 dayNum: [
-                    { required: true, message: '请输入到期前天数', trigger: 'blur'},
-                    { type: 'number',  message: '请输入数字', trigger: 'blur' ,
-                        transform(value) {
-                            return Number(value);
-                        }
-                    },
+                    { validator: (rule, value, callback) => {
+                            if (!value) {
+                                return callback(new Error('请输入到期前天数'));
+                            }else if(!Number(value)){
+                                return callback(new Error('请输入数字格式！'));
+                            }else{
+                                callback();
+                            }
+                        }, trigger: 'blur' }
                 ],
             }
         }

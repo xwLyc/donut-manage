@@ -64,11 +64,11 @@
         </Modal>
         <!-- 查看图片预览  -->
         <Modal title="课程配图" v-model="picPriew" style="text-align:center;" :transfer="false" :mask-closable="false" width="600">
-            <img :src="lessonInfo.picUrl?URL_WEBSITE+lessonInfo.picUrl:''" style="max-width: 100%;max-height:540px;">
+            <img :src="lessonInfo.picUrl?lessonInfo.picUrl:''" style="max-width: 100%;max-height:540px;">
         </Modal>
         <!-- 查看图片预览  -->
         <Modal title="兑换封面" v-model="bookPriew" style="text-align:center;" :transfer="false" :mask-closable="false" width="600">
-            <img :src="lessonInfo.bookUrl?URL_WEBSITE+lessonInfo.bookUrl:''" style="max-width: 100%;max-height:540px;">
+            <img :src="lessonInfo.bookUrl?lessonInfo.bookUrl:''" style="max-width: 100%;max-height:540px;">
         </Modal>
     </div>
 </template>
@@ -230,7 +230,7 @@
                 }
             },
             lessonInfo(){
-                console.log(this.lessonInfo)
+                // console.log(this.lessonInfo)
             }
             
         }

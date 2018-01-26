@@ -182,8 +182,9 @@ export default {
             }
         },
         handleCancel () {
-            this.queryMsgInfo();
             this.formDisabled = true;            
+            this.queryMsgInfo();
+
         },
         queryTmpList(){
             this.queryOneTemplate(this.tplList).then(res => {
@@ -207,7 +208,7 @@ export default {
         // 根据msgId 查询消息
         queryMsgInfo(){
             this.queryMsgBody(this.msgId).then(data => {
-                // console.log(data)
+                console.log(data)
                 let formItem = {};
                 formItem.tplList = data.template._id;
                 formItem.firstColor = '';
@@ -228,16 +229,16 @@ export default {
                     formItem.keyword.push(tmp)
                 })
                 formItem.url = data.url ? data.url : '';
-
+                console.log(formItem)
                 return formItem;
             }).then(formItem => {
                 this.queryOneTemplate(formItem.tplList).then(res => {
-                    // console.log(res)
                     let key = res.data.data.keyword;
                     key.forEach((e, i) => {
                         formItem.keyword[i]['keyword'+(i+1)] = e['keyword'+(i+1)] ;
                     });
                     this.formItem = formItem;
+                    console.log(this.formItem)
                 })
             })
         }
@@ -252,7 +253,7 @@ export default {
         // 选择消息模板时，更新当前数据
         tplList(val, oldVal){
             // msgId 不存在 或者 编辑状态时，才可以监听选择模板id变化, oldVal=='' 是不存在tplid的情况（区分删除组件）
-            if((!this.msgId || !this.formDisabled)&& oldVal=='' || val && oldVal){
+            if((!this.msgId || !this.formDisabled)&& oldVal=='' || val && oldVal && !this.formDisabled){
                 this.queryTmpList();
             }
             
