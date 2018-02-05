@@ -90,18 +90,6 @@
                 bookName: '',
                 picPriew:false,
                 bookPriew:false,
-                lessonInfo: {                               //课程信息
-                    type: '0',
-                    name: '',
-                    desc: '',
-                    picName: '',
-                    picUrl: '',
-                    picId: '',
-                    bookId: '',
-                    bookUrl: '',
-                    bookName: '',
-                    moreInfo: ''
-                },
                 ruleValidate: {
                     // type: [
                     //     { required: this.lessonEdit?false:true, message: '课节类型不能为空', trigger: 'change' }
@@ -126,32 +114,7 @@
             }
         },
         mounted(){
-            // this.$store.dispatch('moduleLesson/queryLessonDetail',this.lessonCurId);
-            let timer = setInterval(()=>{
-                if(this.lessonCourse.name  && this.lessonCourse.image ){
-                    this.lessonInfo = {
-                        type: this.lessonCourse.type,
-                        name: this.lessonCourse.name,
-                        desc: this.lessonCourse.info,
-                        picUrl: this.lessonCourse.image.url,
-                        picId: this.lessonCourse.image._id,
-                        picName: this.lessonCourse.image.name,
-                        lessonCurId: this.lessonCurId,
-                    }
-                    if(this.lessonCourse.type==1){     //兑换类,多余属性
-                        this.lessonInfo.bookUrl = this.lessonCourse.book_image.url;
-                        this.lessonInfo.bookId = this.lessonCourse.book_image._id;
-                        this.lessonInfo.bookName = this.lessonCourse.book_image.name;
-                        this.lessonInfo.moreInfo = this.lessonCourse.book_more_info;
-                    }
-                    this.spin = false;
-                    clearInterval(timer);
-                }
-            },10);
-            if(!this.lessonEdit){
-                this.spin = false;
-            }
-   
+            this.spin = false;
         },
         methods: {
             sourceClick(type){
@@ -196,7 +159,30 @@
         computed: {
             ...mapState('moduleSource',['topFolder','selectedFolder']),
             ...mapState('moduleLesson',['lessonEdit','lessonCourse','lessonCurId']),
+            lessonInfo(){
+                let obj =  {
+                    type: '0',
+                    name: this.lessonCourse.name,
+                    desc: this.lessonCourse.info,
+                    lessonCurId: this.lessonCurId,
+                }
+                if(this.lessonCourse.image){
+                    obj.picUrl = this.lessonCourse.image.url;
+                    obj.picId = this.lessonCourse.image._id;
+                    obj.picName = this.lessonCourse.image.name;
 
+                }
+                if(this.lessonCourse.type==1){     //兑换类,多余属性
+                    if(this.lessonCourse.book_image){
+                        obj.bookUrl = this.lessonCourse.book_image.url;
+                        obj.bookId = this.lessonCourse.book_image._id;
+                        obj.bookName = this.lessonCourse.book_image.name;
+                    }
+                    obj.type = '1';
+                    obj.moreInfo = this.lessonCourse.book_more_info;
+                }
+                return obj;
+            }
         },
         watch: {
             selectedFolder(){
@@ -228,9 +214,6 @@
                 }else{
                     this.typeBtn = false;
                 }
-            },
-            lessonInfo(){
-                // console.log(this.lessonInfo)
             }
             
         }

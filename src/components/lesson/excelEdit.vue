@@ -56,11 +56,11 @@
         </Modal>
         <!-- 查看图片预览  -->
         <Modal title="查看图片" v-model="imagePriew" style="text-align:center;z-index:99999;" width="600">
-            <img :src="excelInfo.imageUrl?URL_WEBSITE+excelInfo.imageUrl:''" style="max-width: 100%;max-height:540px;">
+            <img :src="excelInfo.imageUrl?excelInfo.imageUrl:''" style="max-width: 100%;max-height:540px;">
         </Modal>
         <!-- 查看视频预览  -->
         <Modal title="查看视频" v-model="videoPriew" style="text-align:center;z-index:99999;" width="600" @on-ok="videoClose" @on-cancel="videoClose">
-            <video ref="videoPriew" controls="controls"  preload="true" :src="excelInfo.videoUrl?URL_WEBSITE+excelInfo.videoUrl:''" style="max-width: 100%;max-height:540px;"></video>
+            <video ref="videoPriew" controls="controls"  preload="true" :src="excelInfo.videoUrl?excelInfo.videoUrl:''" style="max-width: 100%;max-height:540px;"></video>
 
         </Modal>
     </div>

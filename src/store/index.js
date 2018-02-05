@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:02:07 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2017-12-18 14:49:44
+ * @Last Modified time: 2018-01-30 17:16:26
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -11,6 +11,7 @@ import moduleSource from './source'
 import moduleLesson from './lesson'
 import moduleActivity from './activity'
 import moduleTemplate from './template'
+import moduleStatistics from './statistics'
 Vue.use(Vuex)
 
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
         moduleSource: moduleSource,
         moduleLesson: moduleLesson,
         moduleTemplate: moduleTemplate,
-        moduleActivity: moduleActivity
+        moduleActivity: moduleActivity,
+        moduleStatistics: moduleStatistics
     }
 })

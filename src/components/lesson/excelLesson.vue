@@ -14,7 +14,7 @@
                     <p><span>课程介绍：</span>{{lessonCourse.info}}</p>
                     <p><span>课程配图：</span>
                         <template v-if="lessonCourse.image">
-                            <img :src="lessonCourse.image.url?URL_WEBSITE+lessonCourse.image.url:''" alt="">
+                            <img :src="lessonCourse.image.url?lessonCourse.image.url:''" alt="">
                         </template>
                     </p>
                 </div>
