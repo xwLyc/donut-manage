@@ -55,7 +55,9 @@
         <Modal v-model="modal3" title="二维码预览" style="text-align:center;z-index:99999;" width="600">
             <img :src="ewmUrl?ewmUrl:''" style="max-width: 100%;max-height:540px;">
         </Modal>
-
+        <Modal v-model="modal4" title="确定删除么？" @on-ok="ok" @on-cancel="cancel">
+            <p>删除数据将不可恢复！</p>
+        </Modal>
     </div>
 </template>
 <script>

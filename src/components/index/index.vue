@@ -35,6 +35,12 @@
                             <span class="layout-text">数据统计</span>
                         </MenuItem>
                     </router-link>
+                    <router-link :to="{path:'/collection'}">
+                        <MenuItem name="collection">
+                            <Icon type="funnel" :size="iconSize"></Icon>
+                            <span class="layout-text">集合页管理</span>
+                        </MenuItem>
+                    </router-link>
                 </Menu>
             </Col>
             <Col :span="spanRight">
@@ -85,6 +91,7 @@
             let activityReg = /^\/activity.*$/;
             let templateReg = /^\/template.*$/;
             let statisticsReg = /^\/statistics.*$/;
+            let collectionReg = /^\/collection.*$/;
             let curRouter = this.$router.history.current.fullPath;
             // console.log(curRouter)
             // console.log(templateReg.test(curRouter))
@@ -102,6 +109,9 @@
             }
             if(statisticsReg.test(curRouter)){  //statistics
                 this.activeName = 'statistics';
+            }
+            if(collectionReg.test(curRouter)){  //collection
+                this.activeName = 'collection';
             }
 
 

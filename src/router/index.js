@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:01:04 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2018-01-09 11:25:14
+ * @Last Modified time: 2018-03-19 10:18:29
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -113,6 +113,12 @@ const router =  new Router({
           path: '/template/editTemplate',
           name: 'editTemplate',
           component: resolve => require(['@/components/template/editTemplate'], resolve)
+        },
+        // 集合页管理
+        {
+          path: '/collection',
+          name: 'collection',
+          component: resolve => require(['@/components/collection'], resolve)
         },
 
       ]
