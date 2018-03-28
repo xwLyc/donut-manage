@@ -121,9 +121,9 @@ const router =  new Router({
           component: resolve => require(['@/components/collection'], resolve)
         },
         {
-          path: '/collection/createCollection',
-          name: 'createCollection',
-          component: resolve => require(['@/components/collection/createCollection'], resolve)
+          path: '/collection/editCollection',
+          name: 'editCollection',
+          component: resolve => require(['@/components/collection/editCollection'], resolve)
         },
 
       ]

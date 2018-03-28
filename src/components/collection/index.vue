@@ -3,32 +3,41 @@
         <div class="layout-breadcrumb">
             <Breadcrumb>
                 <BreadcrumbItem href="#">集合页管理</BreadcrumbItem>
-                <!-- <BreadcrumbItem href="#">应用中心</BreadcrumbItem>
-                    <BreadcrumbItem>某应用</BreadcrumbItem> -->
             </Breadcrumb>
         </div>
         <div class="layout-content">
             <div class="layout-content-main">
                 <h1 class="tac top">集合页管理</h1>
                 <div class="createBox">
-                    <!-- <router-link :to="{path:'/collection/createCollection'}"> -->
-                        <Button type="primary" @click="createCollection">新建集合页</Button>
-                    <!-- </router-link> -->    
+                    <Button type="primary" @click="newCreateCollection">新建集合页</Button>   
                 </div>
                 <div class="List">
+                    <!-- 集合列表 -->
                     <Table border :columns="columns" :data="collectionList"></Table>
-                    <!-- <Page class-name="pageBox" :total="totalCount" :current="page+1" :page-size="pageCount" show-elevator  @on-change="lessonPage"></Page> -->
-                    <!-- <Spin fix size="large" v-show="lessonLoad"></Spin> -->
+                    <!-- 分页组件 -->
+                    <Page class-name="pageBox" :total="totalCount" :current="page+1" :page-size="pageCount" show-elevator  @on-change="collectionPage"></Page>
+                    <!-- loading -->
+                    <Spin fix size="large" v-show="Load"></Spin>
                 </div>
             </div>
         </div>
+
+        <Modal v-model="modal1" title="确定删除么？" @on-ok="ok" @on-cancel="cancel">
+            <p>删除数据将不可恢复！</p>
+        </Modal>
+
     </div>
 </template>
 
 <script>
+    import { mapState, mapActions } from 'vuex'
     export default {
         data () {
             return {
+                modal1: false,
+                page: 0,
+                templateId: '',
+                paramsIndex: 0,
                 columns: [
                     { title: '课程名称', key: 'name' },
                     { title: '课节', key: 'section' },
@@ -50,7 +59,7 @@
                                         size: 'small'
                                     },
                                     style: {
-                                        marginRight: '5px'
+                                        marginRight: '10px'
                                     },
                                     on: {
                                         click: () => {
@@ -65,7 +74,10 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.paramsIndex = params.index;
+                                            this.templateId = params.row._id;
+                                            //弹框是否删除
+                                            this.modal1 = true;
                                         }
                                     }
                                 }, '删除')
@@ -106,26 +118,60 @@
             }
         },
 
+        created(){
+            // 查询集合列表数据
+            // this.queryCollection('');  //连接后台后可放开该注释                              
+            // 清除正在编辑状态以及编辑_id
+            this.clearId();
+        },
+
         methods: {
-            createCollection(){
-                // this.$store.dispatch('moduleLesson/initLessonInfo');
-                this.$router.push({path:'/collection/createCollection'});
+            ...mapActions('moduleCollection',['clearId','queryCollection']),
+            newCreateCollection () {
+                this.$router.push({name: 'editCollection'});
             },
-            editCollection (_id) {
-                this.$store.commit('moduleLesson/lessonCurId',_id);
-                this.$store.commit('moduleLesson/lessonEdit',true);
-                let timerEdit = setInterval(()=>{
-                    if(this.lessonCurId){
-                        this.$store.dispatch('moduleLesson/queryLessonDetail',_id);
-                        this.$router.push({path: '/collection/createCollection'});
-                        clearInterval(timerEdit);
+
+            editCollection(_id){
+                this.$store.commit('moduleCollection/collectionEdit', true);
+                this.$store.commit('moduleCollection/editCollectionId', _id);
+                this.$router.push({ name: 'editCollection'});
+            },
+
+            ok(){   //确认删除
+                this.remove(this.paramsIndex, this.templateId);
+            },
+
+            cancel(){   //取消删除
+                this.modal1 = false;
+            },
+
+            remove (index, _id) {
+                this.removeCollection(_id).then(res => {
+                    if(res.data.code == 0){
+                        this.collectionList.splice(index, 1);   //在前端表格中删除
+                        this.$Message.success('删除成功！');
+                    }else{
+                        this.$Message.error({
+                            content: res.data.msg + '(此集合已被使用！)',
+                            duration: 3    //3秒后消失
+                        });
+
                     }
-                },10)
+                })
             },
-            remove (index) {
-                this.collectionList.splice(index, 1);
-            },
-        }
+
+            collectionPage (page) {   //翻页查询
+                let data = {};
+                data.page = page-1;
+                this.queryCollection(data);
+            }
+        },
+
+        computed: {
+            ...mapState('moduleCollection', ['totalCount','pageCount','collectionEdit','Load'])
+            //删除data中定义的collectionList模拟数据后，需在此处定义collectionList
+            // ...mapState('moduleCollection', ['collectionList','totalCount','pageCount','collectionEdit','Load'])
+        },
     }
 </script>
 
