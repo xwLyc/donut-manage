@@ -8,7 +8,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Template from '../Api/template'
-import { resolve } from 'url';
 Vue.use(Vuex)
 
 
