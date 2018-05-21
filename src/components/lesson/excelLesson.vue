@@ -46,13 +46,35 @@ export default {
             spin:true,
             columns1: [
                     {
-                        title: '课节序列',
+                        // title: '课节序列',
                         key: 'order',
-                        width: '90'
+                        width: '100',
+                        renderHeader: (h, obj) => {
+                            return h('div', [
+                                h('span', '课节序列'),
+                                h('span', {
+                                    style: {
+                                        color: 'red',
+                                        marginLeft: '2px'
+                                    }
+                                }, '*')
+                            ])
+                        }
                     },
                     {
-                        title: '课节名称',
+                        // title: '课节名称',
                         key: 'name',
+                        renderHeader: (h, obj) => {
+                            return h('div', [
+                                h('span', '课节名称'),
+                                h('span', {
+                                    style: {
+                                        color: 'red',
+                                        marginLeft: '2px'
+                                    }
+                                }, '*')
+                            ])
+                        },
                         render: (h, params)=> {
                             if(params.row.name){
                                 return h('div',params.row.name)
@@ -66,8 +88,19 @@ export default {
                         }
                     },
                     {
-                        title: '课节配图',
+                        // title: '课节配图',
                         key: 'image',
+                        renderHeader: (h, obj) => {
+                            return h('div', [
+                                h('span', '课节配图'),
+                                h('span', {
+                                    style: {
+                                        color: 'red',
+                                        marginLeft: '2px'
+                                    }
+                                }, '*')
+                            ])
+                        },
                         render: (h, params)=> {
                             // console.log(params)
                             if(params.row.image){
@@ -82,11 +115,38 @@ export default {
                         }
                     },
                     {
-                        title: '视频',
+                        // title: '视频',
                         key: 'video',
+                        renderHeader: (h, obj) => {
+                            return h('div', [
+                                h('span', '视频'),
+                                h('span', {
+                                    style: {
+                                        color: 'red',
+                                        marginLeft: '2px'
+                                    }
+                                }, '*')
+                            ])
+                        },
                         render: (h, params) =>{
                             if(params.row.video){
                                 return h('div',params.row.video.name)
+                            }else{
+                                return h('div',{
+                                    style: {
+                                        color: 'red'
+                                    }
+                                }, '未匹配')
+                            }
+                        }
+                    },
+                    {
+                        title: '视频配图',
+                        key: 'preview',
+                        render: (h, params)=> {
+                            // console.log(params)
+                            if(params.row.preview){
+                                return h('div',params.row.preview.name)
                             }else{
                                 return h('div',{
                                     style: {
@@ -157,6 +217,9 @@ export default {
                         name:''
                     },
                     video:{
+                        name:''
+                    },
+                    preview:{
                         name:''
                     },
                     question:'',

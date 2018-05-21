@@ -32,7 +32,7 @@
                     </FormItem>
                     <template v-if="lessonInfo.type == '1'">
                         <FormItem label="兑换封面" prop="bookName">
-                            <p>图片尺寸限制：682*384</p>
+                            <p>图片尺寸限制：600*338</p>
                             <Button type="primary" @click="sourceClick('bookName')">资源库</Button>
                             <Input v-model="lessonInfo.bookName" placeholder="请选择兑换封面配图" style="width: 240px;margin:0px 5px;" disabled></Input>
                             <Button type="primary" @click="bookPriew = true">预览</Button>
@@ -88,6 +88,7 @@
                 bookId: '',
                 bookUrl: '',
                 bookName: '',
+                lessonInfo: {},
                 picPriew:false,
                 bookPriew:false,
                 ruleValidate: {
@@ -115,6 +116,7 @@
         },
         mounted(){
             this.spin = false;
+            this.lessonInfoFun();
         },
         methods: {
             sourceClick(type){
@@ -151,15 +153,8 @@
             cancel(){
                 this.modal1 = false;
                 this.$root.$emit('initActive');
-            }
-        },
-        components: {
-            vSource
-        },
-        computed: {
-            ...mapState('moduleSource',['topFolder','selectedFolder']),
-            ...mapState('moduleLesson',['lessonEdit','lessonCourse','lessonCurId']),
-            lessonInfo(){
+            }, 
+            lessonInfoFun(){
                 let obj =  {
                     type: '0',
                     name: this.lessonCourse.name,
@@ -170,7 +165,6 @@
                     obj.picUrl = this.lessonCourse.image.url;
                     obj.picId = this.lessonCourse.image._id;
                     obj.picName = this.lessonCourse.image.name;
-
                 }
                 if(this.lessonCourse.type==1){     //兑换类,多余属性
                     if(this.lessonCourse.book_image){
@@ -181,10 +175,47 @@
                     obj.type = '1';
                     obj.moreInfo = this.lessonCourse.book_more_info;
                 }
-                return obj;
+                this.lessonInfo = obj;
             }
         },
+        components: {
+            vSource
+        },
+        computed: {
+            ...mapState('moduleSource',['topFolder','selectedFolder']),
+            ...mapState('moduleLesson',['lessonEdit','lessonCourse','lessonCurId']),
+            // lessonInfo(){
+            //     let obj =  {
+            //         type: '0',
+            //         name: this.lessonCourse.name,
+            //         desc: this.lessonCourse.info,
+            //         lessonCurId: this.lessonCurId,
+            //     }
+            //     if(this.lessonCourse.image){
+            //         obj.picUrl = this.lessonCourse.image.url;
+            //         obj.picId = this.lessonCourse.image._id;
+            //         obj.picName = this.lessonCourse.image.name;
+
+            //     }
+            //     if(this.lessonCourse.type==1){     //兑换类,多余属性
+            //         if(this.lessonCourse.book_image){
+            //             obj.bookUrl = this.lessonCourse.book_image.url;
+            //             obj.bookId = this.lessonCourse.book_image._id;
+            //             obj.bookName = this.lessonCourse.book_image.name;
+            //         }
+            //         obj.type = '1';
+            //         obj.moreInfo = this.lessonCourse.book_more_info;
+            //     }
+            //     return obj;
+            // }
+        },
         watch: {
+            'lessonCourse.type':{
+                handler(){
+                    this.lessonInfoFun();
+                },
+                deep: true
+            },
             selectedFolder(){
                 if(this.selectedFolder.length < 1){
 

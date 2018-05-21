@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2018-01-30 16:10:11 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2018-02-02 09:54:18
+ * @Last Modified time: 2018-05-21 15:09:55
  */
 import utils from '../utils'
 
@@ -10,6 +10,10 @@ export default {
     //查询数据信息
     queryCourseActInfo: (obj)=>{
         return utils.httpGet(utils.API+'/spell/query_course_act_info', obj)
+    },
+    //活动统计（累计）
+    actStatistics: (obj)=>{
+        return utils.httpGet(utils.API+'/spell/course_act_statistic', obj)
     },
     //课节统计
     lessonStatistics: (obj)=>{

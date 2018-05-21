@@ -51,6 +51,10 @@ const actions = {
             })
         }
     },
+    // 活动统计
+    actStatistics(context, payload){
+        return Statistics.actStatistics(payload)
+    },
     // 课程统计
     courseStatistics(context, payload){
         return Statistics.courseStatistics(payload)

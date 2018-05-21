@@ -71,6 +71,7 @@ export default {
             modal1:false,
             modal2:false,
             modal3:false,
+            modal4:false,
             page: 0,
             paramsIndex: 0,
             activity_id:'',
@@ -122,7 +123,7 @@ export default {
                         title: '活动类型',
                         key: 'type',
                         render: (h, params) => {
-                            return h('div', params.row.type == 1 ? '裂变类':'课程类')
+                            return h('div', params.row.type == 1 ? '普通裂变类':'续期课程类')
                         }
                     },
                     {

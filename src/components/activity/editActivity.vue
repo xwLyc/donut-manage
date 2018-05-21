@@ -164,7 +164,9 @@
             this.queryLesson().then(res => {
                 let data = res.data.data;
                 data.forEach(e => {
-                    this.courseList.push({_id: e._id, name: e.name});
+                    if(e.type == 0){    //续期课程类
+                        this.courseList.push({_id: e._id, name: e.name});
+                    }
                 })
             });
             if(!this.activityEdit){ 

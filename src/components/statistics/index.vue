@@ -34,25 +34,38 @@
                                     <p><strong>状态：</strong> {{courseActInfo.status}}</p>
                                 </div>
                                 <div v-if="selectName == 'activityName'">
-                                    <p><strong>活动名称：</strong> 绘本打卡奖励-外教课</p>
-                                    <p><strong>活动ID：</strong> XXX</p>
-                                    <p><strong>状态：</strong> 已上线</p>
+                                    <p><strong>活动名称：</strong> {{activityActInfo.name}}</p>
+                                    <p><strong>活动ID：</strong> {{activityActInfo._id}}</p>
+                                    <p><strong>状态：</strong> {{activityActInfo.status}}</p>
                                 </div>
                             </Card>
                         </div>
                         
                     </div>  
+                    <div class="queryTop mgt20">
+                        <div class="fbox">
+                            <span>上线日期：</span>
+                            <DatePicker type="daterange" v-model="TimeDate" split-panels :options="options" @on-change="timeChage" placeholder="选择日期" style="width: 200px"></DatePicker>
+                        </div>
+
+                        <div class="fbox">
+                            <Button type="primary" @click="queryAct()">查询</Button>
+                        </div>
+                    </div>
+                    <div class="tableTop">活动统计（累计）</div>
+                        <Table :columns="columnsActivity" :data="dataActivity" ></Table>
                     <div class="queryThird">
                         <!-- 课程 -->
                         <div v-show="selectName == 'lessonName'">
-                            <Row>
+                            
+                            <Row class="mgt20">
                                 <div id="myChart1" :style="{width: '96%', height: '500px'}"></div>
                             </Row>
 
-                            <div class="tableTop" style="margin-top: 20px;">课节统计（累计）</div>
-                            <Table :loading="loadingLesson" :columns="columnsLesson" :data="dataLesson" height="400" ></Table>
+                            <div class="tableTop mgt20" >课节统计（累计）</div>
+                            <Table :loading="loadingLesson" :columns="columnsLesson" :data="dataLesson" height="500" ></Table>
 
-                            <div class="tableTop" style="margin-top: 20px;">用户统计</div>                 
+                            <div class="tableTop mgt20">用户统计</div>                 
                             <Row class="zzt">
                                 <Col span="12">学习天数分布（柱状图）</Col>
                                 <Col span="12">累积有效天数分布（柱状图）</Col>
@@ -70,18 +83,9 @@
                         </div>
                         <!-- 活动 -->
                         <div  v-show="selectName == 'activityName'">
-                            <div class="queryTop">
-                                <div class="fbox">
-                                    <span>上线日期：</span>
-                                    <DatePicker type="daterange" v-model="TimeDate" :options="options" placement="bottom-end" placeholder="选择日期" style="width: 200px"></DatePicker>
-                                </div>
-
-                                <div class="fbox">
-                                    <Button type="primary" @click="queryInfo()">查询</Button>
-                                </div>
-                            </div>
-                            <div class="tableTop">活动统计（累计）</div>
-                            <Table :columns="columnsActivity" :data="dataActivity" ></Table>
+                            
+                            <!-- <div class="tableTop">活动统计（累计）</div>
+                            <Table :columns="columnsActivity" :data="dataActivity1" ></Table> -->
                         </div>
 
                     </div>
@@ -113,6 +117,7 @@
                 loadingLesson: false,
                 showLesson: false,
                 TimeDate: '',
+                timeValue: [],
                 options: {
                     shortcuts: [
                         {
@@ -209,10 +214,10 @@
                 ],
                 dataActivity: [
                     {
-                        joinPeople: 22,
-                        unlockPeople: 18,
-                        studyPeople: 16,
-                        joinRate: '80%'
+                        joinPeople: '',
+                        unlockPeople: '',
+                        studyPeople: '',
+                        joinRate: ''
                     }
                 ]
             };
@@ -221,7 +226,11 @@
             // console.log(this.$refs.mmm);
         },
         methods: {
-            ...mapActions('moduleStatistics', ['queryCourseActInfo', 'courseStatistics', 'lessonStatistics', 'courseStudyDays', 'vipAllDays']),
+            ...mapActions('moduleStatistics', ['queryCourseActInfo', 'actStatistics', 'courseStatistics', 'lessonStatistics', 'courseStudyDays', 'vipAllDays']),
+            timeChage(time){
+                console.log(time)
+                this.timeValue = time
+            },
             queryInfo() {
                 let datas = {
                     type: this.selectName == 'lessonName' ? 0 : 1,
@@ -234,6 +243,41 @@
                         this.showLesson = false;
                     }
                 });
+            },
+            queryAct(){
+                let datas = {}
+                if(this.timeValue!=''){
+                    datas.date = this.timeValue.toString()
+                }else{
+                    this.$Message.error('请选择日期!');
+                    return
+                }
+                if(this.selectName == 'lessonName'){
+                    if(this.courseActInfo._id){
+                        datas.courseId = this.courseActInfo._id
+                    }else{
+                        this.$Message.error('请先查询课程!');
+                        return
+                    }
+                }else{
+                    if(this.activityActInfo._id){
+                        datas.actId = this.activityActInfo._id
+                    }else{
+                        this.$Message.error('请先查询活动!');
+                        return
+                    }                   
+                }
+                this.actStatistics(datas).then(res => {
+                    let data = res.data.data;
+                    this.dataActivity = []
+                    let obj = {
+                        joinPeople: data.cyCount,
+                        unlockPeople: data.unlockCount,
+                        studyPeople: data.learnCount,
+                        joinRate: data.cyl
+                    }
+                    this.dataActivity.push(obj)
+                })
             },
             drawLine1(data) {
                 // 基于准备好的dom，初始化echarts实例
@@ -539,6 +583,11 @@
             ...mapState('moduleStatistics', ['courseActInfo', 'activityActInfo', 'errInfo'])
         },
         watch: {
+            selectName(val){
+                this.dataActivity = [];
+                this.timeValue = [];
+                this.TimeDate = '';
+            },
             courseActInfo(val, oldVal){
                 console.log(val)
                 this.loadSpin = true;
@@ -565,6 +614,7 @@
                     data.forEach((e, i) => {
                         arr.push(e);
                     });
+                    arr.push({});
                     this.loadingLesson = false;
                     this.dataLesson = arr;
                 });
@@ -638,6 +688,9 @@
     }
     thead .redColor{
         color: red;
+    }
+    .mgt20{
+        margin-top: 20px;
     }
     .zzt{
         height: 40px;

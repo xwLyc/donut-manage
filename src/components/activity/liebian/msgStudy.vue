@@ -3,7 +3,7 @@
 
         <template v-for="(item, index) in timeList">
 
-            <Row type="flex" justify="center" class="code-row-bg" :key="index">
+            <Row type="flex" justify="center" class="code-row-bg" :key="index+'1'">
                 <Col span="4" class="textA">日常提醒通知：</Col>
                 <Col span="12">
                     <v-edit-task :taskType="activityType" :activityCurId="activityCurId" :taskId.sync="item.timeTask"></v-edit-task>
@@ -13,7 +13,7 @@
                 </Col>
                 
             </Row>
-            <Row type="flex" justify="center" class="code-row-bg" :key="index">
+            <Row type="flex" justify="center" class="code-row-bg" :key="index+'2'">
                 <Col span="4" class="textA"></Col>
                 <Col span="12">
                     <v-edit-notice :templateList="templateList" :msgId.sync="item.timeMsg"></v-edit-notice>
