@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:02:17 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2017-12-21 18:13:21
+ * @Last Modified time: 2018-05-24 12:02:55
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -145,6 +145,9 @@ const actions = {
         let datas = {};
         if(payload.name){
             datas.course_name = payload.name;
+        }
+        if(payload.type){
+            datas.type = payload.type=='续期类'? 0: 1;
         }
         if(payload.date){
             datas.date = payload.date;

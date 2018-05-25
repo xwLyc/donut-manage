@@ -8,19 +8,21 @@
         </div>
         <div class="layout-content">
             <div class="layout-content-main" style="position:relative;">
-                <h1 class="tac top">消息配置 - {{activityType ? '普通裂变类':'续期课程类'}}</h1>
+                <h1 class="tac top">消息配置 - {{activityType == 1 ? '普通裂变类': activityType == 2 ? '普通非裂变类' : '续期课程类'}}</h1>
                 <Tabs @on-click="tolink">
-                    <!-- 普通裂变类 -->
-                    <template v-if="activityType">
+                    <template v-if="activityType == 1">
                         <TabPane label="解锁" name="lb_msgUnLock"></TabPane>
                         <TabPane label="学习" name="lb_msgStudy"></TabPane>
+                    </template>
+                    <!-- 普通非裂变类 -->
+                    <template v-else-if="activityType == 2">
+                        <TabPane label="学习" name="nlb_msgStudy"></TabPane>
                     </template>
                     <!-- 续期课程类 -->
                     <template v-else>
                         <TabPane label="解锁" name="xq_msgUnLock"></TabPane>
                         <TabPane label="学习" name="xq_msgStudy"></TabPane>
                         <TabPane label="续期" name="xq_msgRenewal"></TabPane>
-
                     </template>
                 </Tabs>
 
@@ -46,8 +48,10 @@
             this.queryTemplate({
                 pageCount: 50
             })
-            if(this.activityType){
+            if(this.activityType == 1){
                 this.$router.push({name: 'lb_msgUnLock'})
+            }else if(this.activityType == 2){
+                this.$router.push({name: 'nlb_msgStudy'})
             }else{
                 this.$router.push({name: 'xq_msgUnLock'})
             }

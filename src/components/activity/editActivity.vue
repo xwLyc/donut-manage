@@ -13,6 +13,7 @@
                 <Form ref="formValidate" :model="activityInfo" :rules="ruleValidate" :label-width="100" style="width: 600px;margin: 0 auto;">
                     <FormItem label="活动类型" prop="type" >
                         <Select class="select1" v-model="activityInfo.type" :disabled="activityEdit">
+                            <Option value="2">普通非裂变类</Option>
                             <Option value="1">普通裂变类</Option>
                             <Option value="0">续期课程类</Option>
                         </Select>
@@ -20,7 +21,7 @@
                     <FormItem label="活动名称" prop="name">
                         <Input v-model="activityInfo.name" placeholder="请输入活动名称，不超过20字"></Input>
                     </FormItem>
-                    <FormItem label="活动码段" prop="part">
+                    <FormItem label="活动码段" prop="part" v-if="activityInfo.type != '2'">
                         <Input v-model="activityInfo.part"  placeholder="请输入活动码段"  :disabled="activityEdit"></Input>
                     </FormItem>
                     <template v-if="activityInfo.type == '0'">
@@ -30,7 +31,7 @@
                             </Select>
                         </FormItem>
                     </template>
-                    <FormItem label="活动海报" prop="picName">
+                    <FormItem label="活动海报" prop="picName"  v-if="activityInfo.type != '2'">
                         <p>图片尺寸限制：750*1334</p>
                         <Upload 
                             ref="upload"
@@ -49,12 +50,12 @@
                         <Button type="primary" @click="picPriew = true">预览</Button>
                     </FormItem>
 
-                    <FormItem label="官方二维码坐标" prop="site">
+                    <FormItem label="官方二维码坐标" prop="site"  v-if="activityInfo.type != '2'">
                         <Input v-model="activityInfo.site" placeholder="请输入二维码坐标"></Input>
                     </FormItem>
 
                     
-                    <FormItem label="专属海报" prop="picNameSelf">
+                    <FormItem label="专属海报" prop="picNameSelf"  v-if="activityInfo.type != '2'">
                         <p>图片尺寸限制：750*1334</p>
                         <Upload 
                             ref="upload"

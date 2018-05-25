@@ -1,7 +1,7 @@
 <template>
     <Card :bordered="true" class="editTask">
         <Form ref="formValidate" :model="formItem" :rules="ruleValidate">
-            <Row v-if="taskType == '1'">
+            <Row v-if="taskType">
                 <Col span="4" style="line-height: 32px;font-size: 12px;">
                     推送时间：
                 </Col>
@@ -52,6 +52,7 @@ export default {
     data(){
         return {
             formDisabled: false,
+            taskTime:'',
             formItem: {
                 dayDate: 1,
                 dayTime: '',
@@ -63,11 +64,11 @@ export default {
                     { required: true, type: 'date', message: '请选择你的推送年月日', trigger: 'change' }
                 ],
                 taskTime: [
-                    { required: true, type: 'date', message: '请选择你的推送时分', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择你的推送时分', trigger: 'change' }
                 ],
                 
                 dayTime: [
-                    { required: true, type: 'date', message: '请选择你的推送时分', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择你的推送时分', trigger: 'change' }
                 ],
             }
         }
@@ -94,7 +95,7 @@ export default {
         formateDate(date){  //年月日
             let year = date.getFullYear();
             let month = date.getMonth()+1;
-            let day = date.getDay();
+            let day = date.getDate();
             return  [year,month,day].map(this.formateShow).join('-') 
         },
         formateTime(time){  //分秒
@@ -114,14 +115,17 @@ export default {
             }else{
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        console.log(valid)
                         let datas = {}
                         datas.segment_id = this.activityCurId;
                         datas.type = this.taskType;
-                        if(this.taskType){  // 1 普通裂变类
-                            datas.time = this.formateDate(this.formItem.taskDate) + ' ' + this.formateTime(this.formItem.taskTime);
+                        if(this.taskType){  // 1 普通裂变类 || 2 普通非裂变类
+                            console.log(this.formItem.taskDate)
+                            console.log(this.formateDate(this.formItem.taskDate))
+                            datas.time = this.formateDate(this.formItem.taskDate) + ' ' + this.formItem.taskTime;
                         }else{              // 0 课程续期类
                             datas.interval = this.formItem.dayDate;
-                            datas.interval_time = this.formateTime(this.formItem.dayTime);
+                            datas.interval_time = this.formItem.dayTime;
                         }
                         if(this.taskId){    //编辑状态
                             datas._id = this.taskId;
@@ -133,6 +137,8 @@ export default {
                             this.formDisabled = true;
     
                         })
+                    }else{
+                        console.log('fail')
                     }
                 })
             }
@@ -168,7 +174,10 @@ export default {
             }else{
                 this.initFormItem();        
             }
-        }
+        },
+        // "formItem.taskTime"(v){
+        //     console.log(v)
+        // }
     }
 }
 </script>

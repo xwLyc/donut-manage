@@ -123,21 +123,25 @@ export default {
                         title: '活动类型',
                         key: 'type',
                         render: (h, params) => {
-                            return h('div', params.row.type == 1 ? '普通裂变类':'续期课程类')
+                            return h('div', params.row.type == 1 ? '普通裂变类': params.row.type == 2 ? '普通非裂变类' :'续期课程类')
                         }
                     },
                     {
                         title: '活动码段',
                         key: 'part',
                         render: (h, params) => {
-                            return h('div', '['+ params.row.minKey+ ', '+ params.row.maxKey+']')
+                            if(params.row.type == 2){
+                                return h('div', '无')
+                            }else{
+                                return h('div', '['+ params.row.minKey+ ', '+ params.row.maxKey+']')
+                            }
                         }
                     },
                     {
                         title: '关联课程',
                         key: 'relation',
                         render: (h, params) => {
-                            return h('div', params.row.course ? params.row.course.name:'')
+                            return h('div', params.row.course ? params.row.course.name:'无')
                         }
                     },
                     {
@@ -170,7 +174,7 @@ export default {
                                 style:{
                                     color: params.row.state==1 ? '#19be6b':''
                                 }
-                            },params.row.state === 0 ? '': params.row.state ==1 ?'已上线':'已下线')
+                            },params.row.state === 0 ? '未上线': params.row.state ==1 ?'已上线':'已下线')
                         }
                     },
                     {
@@ -201,7 +205,8 @@ export default {
                                             size: 'small'
                                         },
                                         style: {
-                                            // marginRight: '5px'
+                                            // 普通费裂变类隐藏
+                                            display: params.row.type == 2 ? 'none' : ''
                                         },
                                         on: {
                                             click: () => {
@@ -261,7 +266,8 @@ export default {
                                             size: 'small'
                                         },
                                         style: {
-                                            // backgroundColor: '#f02db1',
+                                            // 普通费裂变类隐藏
+                                            display: params.row.type == 2 ? 'none' : ''
 
                                         },
                                         on: {

@@ -116,7 +116,7 @@
                 loadSpin3: false,
                 loadingLesson: false,
                 showLesson: false,
-                TimeDate: '',
+                TimeDate: [],
                 timeValue: [],
                 options: {
                     shortcuts: [
@@ -204,7 +204,7 @@
                         className: 'redColor'
                     },
                     {
-                        title: '学习人数（去重）',
+                        title: '学习人数',
                         key: 'studyPeople'
                     },
                     {
@@ -213,12 +213,12 @@
                     }
                 ],
                 dataActivity: [
-                    {
-                        joinPeople: '',
-                        unlockPeople: '',
-                        studyPeople: '',
-                        joinRate: ''
-                    }
+                    // {
+                    //     joinPeople: '',
+                    //     unlockPeople: '',
+                    //     studyPeople: '',
+                    //     joinRate: ''
+                    // }
                 ]
             };
         },
@@ -237,6 +237,8 @@
                     name: this.value1.trim()
                 }
                 this.queryCourseActInfo(datas).then(res => {
+                    this.clearTimeDate();
+                    
                     if(!res){   // 0 显示课程
                         this.showLesson = true;
                     }else{      // -1 隐藏课程
@@ -577,6 +579,12 @@
     
                 // 绘制图表
                 myChart3.setOption(option);
+            },
+            // 发生变化时，清空时间数据
+            clearTimeDate(){
+                this.dataActivity = [];
+                this.timeValue = [];
+                this.TimeDate = '';
             }
         },
         computed: {
@@ -584,9 +592,7 @@
         },
         watch: {
             selectName(val){
-                this.dataActivity = [];
-                this.timeValue = [];
-                this.TimeDate = '';
+                this.clearTimeDate();
             },
             courseActInfo(val, oldVal){
                 console.log(val)
