@@ -6,7 +6,7 @@
 
 该项目作为vue开发规范样板参考
 
-项目目前用到的技术、框架： Vue2 + Vuex + vue-router + iview2 + Axios + Sass （适用于pc开发）
+项目目前用到的技术、框架： Vue2 + Vuex + vue-router + iview2 + Axios + Sass + Echarts + Validate（适用于pc开发）
 
 项目搭建应由项目主要负责人或者对项目逻辑了解最多的人去搭建配置项目（/config 、 /router/index.js、 /store/index.js、 main.js等关键文件），多人合作开发项目时，关键文件需由主要负责人去提交Git以防止文件冲突。
 
