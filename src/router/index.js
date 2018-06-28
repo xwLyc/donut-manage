@@ -2,7 +2,7 @@
  * @Author: lyc 
  * @Date: 2017-11-03 18:01:04 
  * @Last Modified by: liyuancheng
- * @Last Modified time: 2018-05-22 10:29:07
+ * @Last Modified time: 2018-06-05 18:51:13
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -24,6 +24,11 @@ const router = new Router({
             path: '/login',
             name: 'login',
             component: resolve => require(['@/components/login'], resolve)
+        },
+        {
+            path: '/appConfig',
+            name: 'appConfig',
+            component: resolve => require(['@/components/appConfig'], resolve)
         },
         {
             path: '/index',

@@ -400,6 +400,7 @@ export default {
         }
     },
     computed:{
+        ...mapState(['curGzhId']),
         ...mapState('moduleActivity',['activityList','activityLoad','totalCount','pageCount','activityCurId','updatedStatus','webSite'])
     },
     watch: {
@@ -411,7 +412,11 @@ export default {
                 this.queryActivity();
                 this.$store.commit('moduleActivity/updatedStatus',false);
             }
-        }
+        },
+        curGzhId(val){
+            this.queryActivity();
+            this.clearActivity();
+        },
     }
 
 }

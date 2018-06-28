@@ -161,10 +161,16 @@ export default {
         }
     },
     computed: {
+        ...mapState(['curGzhId']),
         ...mapState('moduleTemplate', ['templateList','totalCount','pageCount','templateEdit','Load'])
     },
     watch: {
-
+        curGzhId(val){
+            // 查询
+            this.queryTemplate('');                                
+            // 清除正在编辑状态以及编辑_id
+            this.clearId();
+        },
     }
 }
 </script>

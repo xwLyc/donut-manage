@@ -48,7 +48,7 @@ export default {
                     {
                         // title: '课节序列',
                         key: 'order',
-                        width: '100',
+                        width: 100,
                         renderHeader: (h, obj) => {
                             return h('div', [
                                 h('span', '课节序列'),
@@ -189,7 +189,7 @@ export default {
                     {
                         title: '操作',
                         key: 'edit',
-                        width: '80',
+                        width: 80,
                         render: (h, params) =>{
                             return h('div', [
                                 h('Button', {
@@ -209,23 +209,7 @@ export default {
                             ]);
                         }
                     }
-                ],
-                data1: [{
-                    order:'',
-                    name:'',
-                    image:{
-                        name:''
-                    },
-                    video:{
-                        name:''
-                    },
-                    preview:{
-                        name:''
-                    },
-                    question:'',
-                    answer:'',
-                    finished:''
-                }]
+                ]
         }
     },
     mounted(){

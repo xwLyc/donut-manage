@@ -32,7 +32,6 @@
                     <!-- <router-link :to="{path:'/lesson/editLesson'}"> -->
                         <Button type="primary" @click="newCreateLesson">新建课程</Button>
                     <!-- </router-link> -->
-                    
                 </div>
                 <div class="List">
                     <Table border :columns="columns" :data="lessonList"></Table>
@@ -54,8 +53,9 @@
     </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('moduleLesson')
+import { mapState, mapActions } from 'vuex'
+// import { createNamespacedHelpers } from 'vuex'
+// const { mapState, mapActions } = createNamespacedHelpers('moduleLesson')
 export default {
     data() {
         return {
@@ -333,9 +333,13 @@ export default {
         }
     },
     computed:{
-        ...mapState(['lessonList','lessonLoad','totalCount','pageCount','lessonCurId','updatedStatus','webSite'])
+        ...mapState(['curGzhId']),
+        ...mapState('moduleLesson', ['lessonList','lessonLoad','totalCount','pageCount','lessonCurId','updatedStatus','webSite'])
     },
     watch: {
+        curGzhId(val){
+            this.queryLesson();
+        },
         select1() {
             console.log(this.select1)
         },
@@ -344,7 +348,8 @@ export default {
                 this.queryLesson();
                 this.$store.commit('moduleLesson/updatedStatus',false);
             }
-        }
+        },
+
     }
 
 }
